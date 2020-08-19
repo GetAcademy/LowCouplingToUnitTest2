@@ -12,12 +12,17 @@ namespace LowCouplingToUnitTest
 
         static async Task MainAsync()
         {
-            var generator = new JokeGenerator();
+            var chuckNorrisJokeApi = new ChuckNorrisJokeApi();
+            var generator = new JokeGenerator(chuckNorrisJokeApi);
+            //var jokeFetcher = new JokeFetcher();
+            //var jokeSearch = new JokeSearch();
             while (true)
             {
-                Console.Write("Hvilken bokstav du at vitsene skal begynne på? ");
+                Console.Write("Hvilket ord vil du at vitsene skal ha to av? ");
                 var  word = Console.ReadLine();
                 var joke = await generator.GetJokeWithWordTwoTimes(word);
+                //var jokes = await jokeFetcher.GetJokes(word);
+                //var joke = jokeSearch.GetJokeWithWordTwoTimes(word, jokes);
                 Console.WriteLine(joke ?? $"Fant ingen vitser med ordet \"{word}\" to ganger.");
             }
         }

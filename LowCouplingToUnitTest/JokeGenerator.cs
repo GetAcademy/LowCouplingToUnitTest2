@@ -7,17 +7,24 @@ using RestSharp;
 
 namespace LowCouplingToUnitTest
 {
-    class JokeGenerator
+    public class JokeGenerator
     {
+        private readonly IJokeService _jokeService;
+
+        public JokeGenerator(IJokeService jokeService)
+        {
+            _jokeService = jokeService;
+        }
+
         public async Task<string> GetJokeWithWordTwoTimes(string word)
         {
-            var client = new RestClient("https://api.chucknorris.io");
-            var request = new RestRequest($"/jokes/search?query={word}", DataFormat.Json);
-            var result = await client.GetAsync<ChuckNorrisJokeSearchResultSet>(request);
+            //var client = new RestClient("https://api.chucknorris.io");
+            //var request = new RestRequest($"/jokes/search?query={word}", DataFormat.Json);
+            //var result = await client.GetAsync<ChuckNorrisJokeSearchResultSet>(request);
+            var jokes = await _jokeService.SearchForJokes(word);
 
-            foreach (var jokeObj in result.result)
+            foreach (var joke in jokes)
             {
-                var joke= jokeObj.value;
                 var firstPosition = joke.IndexOf(word, StringComparison.OrdinalIgnoreCase);
                 if (firstPosition == -1) continue;
                 var secondPosition = joke.IndexOf(word, firstPosition + 1, StringComparison.OrdinalIgnoreCase);
